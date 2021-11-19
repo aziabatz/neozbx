@@ -8,7 +8,7 @@ ENABLE_LANGUAGE(ASM-ATT)
 
 file(GLOB_RECURSE CPP_FILES "src/*.cpp")
 file(GLOB_RECURSE ASM_FILES "src/*.s" "src/*.asm")
-file(GLOB_RECURSE HPP_FILES "src/*.hpp")
+file(GLOB_RECURSE HPP_FILES "include/*.hpp")
 
 set(CMAKE_CXX_COMPILER "/usr/local/bin/i386-unknown-freebsd13.0-g++9")
 set(CMAKE_ASM-ATT_COMPILER "/usr/local/bin/i386-unknown-freebsd13.0-as")
@@ -29,3 +29,4 @@ set(kbin_name kernel.kim)
 MESSAGE(STATUS "SOURCES ARE ${SRCS}")
 add_executable(${kbin_name} ${SRCS})
 set_target_properties(${kbin_name} PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(${kbin_name} PRIVATE include)
