@@ -5,7 +5,7 @@
  * Author:  Ahmed Ziabat Ziabat
  * Created: 2021-11-19
  */
-#include <System/InputOutput/Output/Screen>
+#include <System/InputOutput/Output/Screen.hpp>
 
 extern "C" int __kmain()
 {
