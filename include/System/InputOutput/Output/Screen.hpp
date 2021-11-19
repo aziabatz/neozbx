@@ -31,6 +31,13 @@
 class BasicVGA
 {
 	//TODO screen size(80x25)
+	private:
+		int screenHeight;
+		int screenWidth;
+
+	public:
+		BasicVGA();
+		BasicVGA(int height, int width);
 	//TODO write IMPORTANT!! Method inherited cause of its dev FOLLOW UNIX-LIKE DESIGN
 	//TODO inport and outport to write to vga mem, should be in system class if we create one
 };
