@@ -6,6 +6,8 @@
  * Created: 2021-11-19
  */
 
+#include <System/InputOutput/IODriver.hpp>
+
 #ifndef NZX_SCREEN_HPP
 #define NZX_SCREEN_HPP
 
@@ -28,16 +30,26 @@
 #define NZX_VGA_LMAGENTA	0xD
 #define NZX_VGA_LBROWN		0xE
 
-class BasicVGA
+using namespace InputOutputDriver;
+
+class BasicVGA: IODriver
 {
 	//TODO screen size(80x25)
 	private:
+
 		int screenHeight;
 		int screenWidth;
+		
+		int cursorX;
+		int cursorY;
+		
+		const char * frameBuffer = (char *) 0xB8000;
 
 	public:
+
 		BasicVGA();
 		BasicVGA(int height, int width);
+		int write(DriverData * driverData);
 	//TODO write IMPORTANT!! Method inherited cause of its dev FOLLOW UNIX-LIKE DESIGN
 	//TODO inport and outport to write to vga mem, should be in system class if we create one
 };

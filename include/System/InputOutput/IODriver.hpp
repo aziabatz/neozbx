@@ -6,7 +6,15 @@
  * Created: 2021-11-19
  */
 
+#include <types.h>
+#include <System/Driver.hpp>
+
 namespace InputOutputDriver{
+	typedef struct driverData{
+		unsigned int size;
+		void * data;
+	} DriverData;
+
 	class IODriver: public Driver
 	{
 		private:
@@ -14,7 +22,7 @@ namespace InputOutputDriver{
 		protected:
 			void updateUptime(uint32_t &uptime);
 		public:
-			int write(DriverData * data);
+			int write(DriverData * driverData);
 			DriverData * read();
 	};
 }
