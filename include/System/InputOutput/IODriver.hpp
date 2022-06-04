@@ -22,7 +22,8 @@ namespace InputOutputDriver{
 		protected:
 			void updateUptime(uint32_t &uptime);
 		public:
-			int write(DriverData * driverData);
-			DriverData * read();
+			virtual int write(DriverData * driverData);
+			virtual DriverData * read();
+			virtual DriverData * read(unsigned int size);
 	};
 }
