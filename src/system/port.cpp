@@ -47,15 +47,15 @@ InputOutputDriver::DriverData * SystemPort::read(unsigned int size)
     InputOutputDriver::DriverData ddata;
     switch (size)
     {
-        case 8:
+        case 1:
             ddata.data = (void*)in8();
             ddata.size = 1;
             break;
-        case 16:
+        case 2:
             ddata.data = (void*)in16();
             ddata.size = 2;
             break;
-        case 32:
+        case 4:
             ddata.data = (void*)in32();
             ddata.size = 4;
             break;
@@ -124,15 +124,15 @@ int SystemPort::write(InputOutputDriver::DriverData * driverData)
     {
         switch(driverData->size)
         {
-            case 8:
+            case 1:
                 out8(driverData->data);
                 written = 8;
                 break;
-            case 16:
+            case 2:
                 out16(driverData->data);
                 written = 16;
                 break;
-            case 32:
+            case 4:
                 out32(driverData->data);
                 written = 32;
                 break;

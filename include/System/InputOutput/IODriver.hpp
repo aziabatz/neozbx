@@ -9,11 +9,16 @@
 #include <types.h>
 #include <System/Driver.hpp>
 
+#ifndef IODRIVER_H
+#define IODRIVER_H
+
 namespace InputOutputDriver{
-	typedef struct driverData{
+	struct driverData{
 		unsigned int size;
 		void * data;
-	} DriverData;
+	};
+
+	typedef struct driverData DriverData;
 
 	class IODriver: public Driver
 	{
@@ -27,3 +32,5 @@ namespace InputOutputDriver{
 			virtual DriverData * read(unsigned int size);
 	};
 }
+
+#endif
