@@ -14,8 +14,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
 #include <System/InputOutput/Output/Screen.hpp>
 #include <System/InputOutput/SystemPort.hpp>
 
-SystemPort indexPort;
-SystemPort charPort;
+SystemPort *indexPort;
+SystemPort *charPort;
 
 void BasicVGA::clearLine(uint32_t line){
     uint16_t cursor = screenWidth * line * screenDepth;
@@ -45,13 +45,13 @@ void BasicVGA::positionCursor(int newX, int newY){
     ddata.size = 1;
 
     ddata.data = (void*)0xF;
-    indexPort.write(&ddata);
+    indexPort->write(&ddata);
     ddata.data = (void*) ((uint8_t)(position & 0xFF)); // first lower byte of position
-    charPort.write(&ddata);
+    charPort->write(&ddata);
     ddata.data = (void*)0x0E;
-    indexPort.write(&ddata);
+    indexPort->write(&ddata);
     ddata.data = (void*) ((uint8_t)((position >> 8) & 0xFF));
-    charPort.write(&ddata);
+    charPort->write(&ddata);
 }
 
 void BasicVGA::newLine()
@@ -95,8 +95,8 @@ BasicVGA::BasicVGA(int width, int height){
     this->screenHeight = height;
     this->cursorX = this->cursorY = 0;
     this->screenDepth = 2;
-    indexPort = SystemPort(0x3D4);
-    charPort = SystemPort(0x3D5);
+    indexPort = &(SystemPort(0x3D4));
+    charPort = &(SystemPort(0x3D5));
 }
 
 int BasicVGA::write(InputOutputDriver::DriverData * driverData)
