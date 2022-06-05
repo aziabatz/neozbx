@@ -13,9 +13,17 @@ class SystemPort: public InputOutputDriver::IODriver
 {
     private:
         uint16_t port;
+
+        uint8_t in8();
+        uint16_t in16();
+        uint32_t in32();
+
+        void out8(void * data);
+        void out16(void * data);
+        void out32(void * data);
     public:
         SystemPort(uint16_t port);
-        ~SystemPort();
+        //~SystemPort();
 
         InputOutputDriver::DriverData * read();
         InputOutputDriver::DriverData * read(unsigned int size);

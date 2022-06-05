@@ -12,7 +12,7 @@ file(GLOB_RECURSE HPP_FILES "include/*.hpp")
 
 set(CMAKE_CXX_COMPILER "i686-elf-g++")
 set(CMAKE_ASM-ATT_COMPILER "i686-elf-as")
-set(CMAKE_CXX_FLAGS "-c -m32 -ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti")
+set(CMAKE_CXX_FLAGS "-c -m32 -ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti -fpermissive")
 set(CMAKE_CXX_LINK_EXECUTABLE "i686-elf-ld -T linker.ld -m elf_i386 <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
 #set(CMAKE_ASM_FLAGS "")
 set(CMAKE_ASM-ATTFLAGS "--32")

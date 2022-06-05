@@ -121,6 +121,8 @@ class BasicVGA: IODriver
 		 * @see InputOutputDriver::IODriver#write
 		 */
 		int write(DriverData * driverData);
+		DriverData * read();
+		DriverData * read(unsigned int size);
 	//TODO write IMPORTANT!! Method inherited cause of its dev FOLLOW UNIX-LIKE DESIGN
 	//TODO inport and outport to write to vga mem, should be in system class if we create one
 };
