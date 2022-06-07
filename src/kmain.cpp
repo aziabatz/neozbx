@@ -24,13 +24,19 @@ extern "C" int __kmain()
 
 	BasicVGA vga(80,25);
 
-	ddata.data =(void*)"BBBBB";
-	ddata.size = 5;
+	char const* str = "Hola";
+
+	ddata.data =(void *) str;
+	ddata.size = 4;
 	
 	vga.write(&ddata);
 
-	for(int i = 0;i<10;i++)
+	for(int i = 0;i<10;i++){
+		ddata.data = (void*)str[i%4];
+		ddata.size = 1;
 		sp.write(&ddata);
+	}
+		
 	
 	for(;;){}
 }

@@ -26,12 +26,7 @@ void BasicVGA::clearLine(uint32_t line){
     }
 }
 
-void BasicVGA::clearLines(uint32_t from, uint32_t to){/*
-    uint16_t cursor = screenWidth * from * screenDepth;
-    for(cursor;cursor<(this->screenWidth *(to+1)*this->screenDepth);cursor+=screenDepth){
-        *(frameBuffer+cursor) = 0x0;
-    }*/
-    //TODO TEST THIS
+void BasicVGA::clearLines(uint32_t from, uint32_t to){
     for(int line = from; line < to; line++){
         this->clearLine(line);
     }
@@ -104,7 +99,11 @@ void BasicVGA::scrollScreen(int lines){
 }
 
 void BasicVGA::highlightCursor(int x, int y){
-    
+    uint8_t color = this->frameBuffer[(y * screenWidth + x) * screenDepth + 1];
+    uint8_t bg = (color & 0xF0) >> 4;
+    uint8_t fg = color & 0x0F;
+    uint8_t newColor = (fg<<4) | bg;
+    this->frameBuffer[(y * screenWidth + x) * screenDepth + 1] = newColor;
 }
 
 BasicVGA::BasicVGA(){
