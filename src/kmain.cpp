@@ -1,7 +1,7 @@
 /**
  * @ Author: Ahmed Ziabat Ziabat (aka) BLACKBURN
  * @ Created: 2022-01-27
- * @ Last revision: 2022-06-05
+ * @ Last revision: 2022-06-07
  * @ Description: Copyright (c) 2021-2022, Ahmed Ziabat
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -18,10 +18,25 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
 extern "C" int __kmain()
 {
 	SystemPort sp = SystemPort(0x3f8);
+	
 	InputOutputDriver::DriverData ddata;
-	ddata.data =(void*)'A';
-	ddata.size = 1;
-	for(int i = 0;i<10;i++)
+
+
+	BasicVGA vga(80,25);
+
+	char const* str = "Hola";
+
+	ddata.data =(void *) str;
+	ddata.size = 4;
+	
+	vga.write(&ddata);
+
+	for(int i = 0;i<10;i++){
+		ddata.data = (void*)str[i%4];
+		ddata.size = 1;
 		sp.write(&ddata);
-	return 0;
+	}
+		
+	
+	for(;;){}
 }

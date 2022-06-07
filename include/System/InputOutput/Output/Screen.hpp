@@ -1,7 +1,7 @@
 /**
  * @ Author: Ahmed Ziabat Ziabat (aka) BLACKBURN
  * @ Created: 2022-01-27
- * @ Last revision: 2022-06-05
+ * @ Last revision: 2022-06-06
  * @ Description: Copyright (c) 2021-2022, Ahmed Ziabat
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -54,7 +54,7 @@ class BasicVGA: IODriver
 		int cursorY;
 		
 		/** Framebuffer address */
-		char * const frameBuffer = (char *) 0xB8000;
+		unsigned char * const frameBuffer = (unsigned char *) 0xB8000;
 		
 
 		/**
@@ -93,6 +93,12 @@ class BasicVGA: IODriver
 		void newLine();
 
 		/**
+		 * @brief Makes a carriage return
+		 * 
+		 */
+		void carriageReturn();
+
+		/**
 		 * @brief Scrolls the screen up 1 line
 		 * 
 		 */
@@ -112,6 +118,10 @@ class BasicVGA: IODriver
 		 * @param y Y position to be highlighted
 		 */
 		void highlightCursor(int x, int y);
+
+		void writeToFramebuffer(int x, int y, char c);
+
+		void writeChar(char c);
 
 	public:
 

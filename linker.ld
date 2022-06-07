@@ -1,19 +1,21 @@
 OUTPUT_FORMAT(elf32-i386)
+OUTPUT_ARCH(i386:i386)
 ENTRY(__load_entry)
  
 SECTIONS
 {
 	. = 1M;
- 
-	.text :
+
+	
+	.text : ALIGN(4K)
 	{
-		*(.multiboot)
+		*(.multiboot)	
 		*(.text)
 	}
  
 	
  
-	.data :
+	.data : ALIGN(4K)
 	{
 		*(.rodata)
 
@@ -25,14 +27,14 @@ SECTIONS
 		*(.data)
 	}
  
-	.bss :
+	.bss : ALIGN(4K)
 	{
 		*(COMMON)
 		*(.bss)
 	}
 
 	.end : {
-		end = .;
+		_kstart_ = .;
 		*(.end)
 		. = ALIGN(4096);
 	}
