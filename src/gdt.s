@@ -1,6 +1,6 @@
 /**
  * @ Author: Ahmed Ziabat Ziabat (aka) BLACKBURN
- * @ Created: 2022-01-27
+ * @ Created: 2022-06-07
  * @ Last revision: 2022-06-07
  * @ Description: Copyright (c) 2021-2022, Ahmed Ziabat
 All rights reserved.
@@ -11,45 +11,65 @@ Neither the name of copyright holders nor the names of its contributors may be u
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-// Multiboot header
-.set ALIGN, (1<<0)
-.set MEMINFO, (1<<1)
-.set FLAGS, ALIGN | MEMINFO
-.set MAGIC, 0x1badb002
-.set CHECKSUM, -(MAGIC+FLAGS)
-
-// Multiboot section for linker
-
-.section .multiboot
-.align 4 # Align 32-bit
-.long MAGIC
-.long FLAGS
-.long CHECKSUM
-
-// Uninitialized area
-.section .bss
-.align 16
-loader_stack:
-.skip (16*1024) #16 Kb
-
-// And now the loader code :)
-
 .section .text
-.globl __load_entry
-.globl __global_halt
-.extern __load_gdt
-.extern __kmain
+.global __load_gdt
+__load_gdt:
 
-__load_entry:
-	mov $loader_stack, %esp
-	//TODO push multiboot header
-	call __load_gdt
+    lgdt _gdtr
+    movl %cr0, %eax
+    orl $1, %eax
+    mov %eax, %cr0
 
-	__global_halt:
-	cli
-	hlt
-	jmp __global_halt
+    ljmp $0x08, $__protected_mode
 
-//TODO initialize start ld symbol(for traces)
-.size _kstart_, . - __load_entry
+    __protected_mode:
+        cli
+        movw $0x10, %ax
+        movw %ax, %ds
+        movw %ax, %es
+        movw %ax, %fs
+        movw %ax, %gs
+        movw %ax, %gs
+        call __kmain
+
+
+
+.section .data
+
+.align 8
+
+_gdtr:
+    .word (_gdt_end - _gdt_start)
+    .int _gdt_start
+
+_gdt_start:
+
+    /*
+    For code and data segments
+    Base: 0x0
+    Limit: 0xFFFF.FFFF
+    Granularity: 0xC
+    */
+
+    //Null entry
+    .quad 0
+
+    //Code entry
+    .word 0xFFFF //limit 1
+    .word 0x0    //base 1
+    .byte 0x0    //base 2
+    .byte 0x9A   //access
+    .byte 0xCF   //flags | limit
+    .byte 0x0    //base 3
+
+    //Data entry
+    .word 0xFFFF //limit 1
+    .word 0x0    //base 1
+    .byte 0x0    //base 2
+    .byte 0x92   //access
+    .byte 0xCF   //flags | limit
+    .byte 0x0    //base 3
+
+_gdt_end:
+
+
