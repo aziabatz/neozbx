@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Launch QEMU",
+            "type": "shell",
+            "linux": {
+                "command": "${workspaceFolder}/qemu_debug.sh &"
+            }
+        },
+        {
+            "label": "Kill QEMU",
+            "type": "shell",
+            "linux": {
+                "command": "pkill qemu-system-i38 &"
+            }
+        }
+    ]
+}

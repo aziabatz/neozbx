@@ -1,7 +1,7 @@
 /**
  * @ Author: Ahmed Ziabat Ziabat (aka) BLACKBURN
  * @ Created: 2022-01-27
- * @ Last revision: 2022-06-06
+ * @ Last revision: 2022-06-07
  * @ Description: Copyright (c) 2021-2022, Ahmed Ziabat
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -24,13 +24,13 @@ extern "C" int __kmain()
 
 	BasicVGA vga(80,25);
 
-	ddata.data =(void*)'B';
-	ddata.size = 1;
+	ddata.data =(void*)"BBBBB";
+	ddata.size = 5;
 	
 	vga.write(&ddata);
 
 	for(int i = 0;i<10;i++)
-	sp.write(&ddata);
+		sp.write(&ddata);
 	
 	for(;;){}
 }

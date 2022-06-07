@@ -6,20 +6,16 @@ SECTIONS
 {
 	. = 1M;
 
-	.multiboot :
-	{
-		*(.multiboot)
-	}
 	
-	.text :
+	.text : ALIGN(4K)
 	{
-		
+		*(.multiboot)	
 		*(.text)
 	}
  
 	
  
-	.data :
+	.data : ALIGN(4K)
 	{
 		*(.rodata)
 
@@ -31,14 +27,14 @@ SECTIONS
 		*(.data)
 	}
  
-	.bss :
+	.bss : ALIGN(4K)
 	{
 		*(COMMON)
 		*(.bss)
 	}
 
 	.end : {
-		end = .;
+		_kstart_ = .;
 		*(.end)
 		. = ALIGN(4096);
 	}

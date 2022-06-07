@@ -1,0 +1,40 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch with GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/kernel.kim",
+            "cwd": "${workspaceFolder}",
+            "args": [],
+           /* "sourceFileMap": {
+                "<source-path>": "<target-path>"
+            },*/
+            "targetArchitecture": "x86",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "miDebuggerArgs": "",
+            "customLaunchSetupCommands": [
+                
+            ],
+            "preLaunchTask": "Launch QEMU",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "text": "file kernel.kim"
+                },
+                {
+                    "text": "target remote localhost:1234",
+                    "description": "Connect to QEMU remote debugger"
+                }
+            ],
+            "postDebugTask": "Kill QEMU"
+            
+        }
+    ]
+}

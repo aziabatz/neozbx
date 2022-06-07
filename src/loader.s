@@ -1,7 +1,7 @@
 /**
  * @ Author: Ahmed Ziabat Ziabat (aka) BLACKBURN
  * @ Created: 2022-01-27
- * @ Last revision: 2022-06-06
+ * @ Last revision: 2022-06-07
  * @ Description: Copyright (c) 2021-2022, Ahmed Ziabat
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -27,6 +27,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
 .long FLAGS
 .long CHECKSUM
 
+// Uninitialized area
+.section .bss
+.align 16
+loader_stack:
+.skip (16*1024) #16 Kb
+
 // And now the loader code :)
 
 .section .text
@@ -44,11 +50,5 @@ __load_entry:
 	hlt
 	jmp __global_halt
 
-
-// Uninitialized area
-.section .bss
-.align 16
-loader_stack:
-.skip (16*1024) #16 Kb
-
 //TODO initialize start ld symbol(for traces)
+.size _kstart_, . - __load_entry
