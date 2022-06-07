@@ -1,5 +1,6 @@
 # NEOZBX
 # A reimplementation of Zibix kernel on C++
+[![wakatime](https://wakatime.com/badge/github/aziabatz/neozbx.svg?style=for-the-badge)](https://wakatime.com/badge/github/aziabatz/neozbx)
 
 ## Requirements
 > G++ 11.2.0
