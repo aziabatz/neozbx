@@ -15,6 +15,22 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
 #include <System/InputOutput/SystemPort.hpp>
 #include <System/InputOutput/IODriver.hpp>
 
+typedef void (*ctor)();
+typedef void (*dtor)();
+
+extern "C" ctor __ctor_start;
+extern "C" ctor __ctor_end;
+
+extern "C" void _create_instances_()
+{
+	for(ctor * instance = &__ctor_start;
+		instance != &__ctor_end;
+		instance++)
+	{
+		(*instance)();
+	}
+}
+
 extern "C" int __kmain()
 {
 	SystemPort sp = SystemPort(0x3f8);
