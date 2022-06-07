@@ -19,10 +19,10 @@ SECTIONS
 	{
 		*(.rodata)
 
-		create_instance = .;
+		__ctor_start = .;
 		KEEP(*( .init_array ));
 		KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
-		destroy_instance = .;
+		__ctor_end = .;
 
 		*(.data)
 	}

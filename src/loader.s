@@ -39,10 +39,12 @@ loader_stack:
 .globl __load_entry
 .globl __global_halt
 .extern __kmain
+.extern _create_instances_
 
 __load_entry:
 	mov $loader_stack, %esp
 	//TODO push multiboot header
+	call _create_instances_
 	call __kmain
 
 	__global_halt:
