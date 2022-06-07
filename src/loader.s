@@ -41,10 +41,14 @@ loader_stack:
 .extern __load_gdt
 .extern __kmain
 
-__load_entry:
+__load_gdt:
+
 	mov $loader_stack, %esp
-	//TODO push multiboot header
 	call __load_gdt
+
+__load_entry:
+	//TODO push multiboot header
+	call __kmain
 
 	__global_halt:
 	cli

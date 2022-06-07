@@ -30,7 +30,8 @@ __load_gdt:
         movw %ax, %fs
         movw %ax, %gs
         movw %ax, %gs
-        call __kmain
+        
+    ret
 
 
 
@@ -40,7 +41,7 @@ __load_gdt:
 
 _gdtr:
     .word (_gdt_end - _gdt_start)
-    .int _gdt_start
+    .long _gdt_start
 
 _gdt_start:
 
