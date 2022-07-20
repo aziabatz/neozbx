@@ -1,5 +1,5 @@
 OUTPUT_FORMAT(elf32-i386)
-ENTRY(__load_entry)
+ENTRY(__load_entry)/*TODO change entry to gdt load*/
  
 SECTIONS
 {

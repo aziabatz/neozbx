@@ -1,0 +1,39 @@
+__set_gates:
+    push %eax
+    push %ebx
+    push %ecx
+    push %edx
+    push %edi
+    push %esi
+
+    mov $32, %ecx
+    __idt_spec_set:
+        mov _idt_start, %ebx
+        mov $_KERNEL_CS, %edx
+        xor %edi,%edi
+        mov $_IDT_GATE_FLAGS, %di
+        //no need to modify ecx?
+        push %ecx
+            mov $_exceptions_table, %esi # address of table
+            #mov (%esi), %eax
+            #mov %eax, %esi
+            dec %ecx
+            mov %ecx, %eax #index in table
+            mov (%esi, %ecx, 4),%ecx # macro label address in table
+            #mov (%ecx), %ecx # address of function
+            
+            call __install_gate
+        pop %ecx
+    loop __idt_spec_set
+/*
+	mov $0x00008E0000080000, %eax
+	mov _idt_start, %ebx
+	mov %ea
+*/
+    pop %esi
+    pop %edi
+    pop %edx
+    pop %ecx
+    pop %ebx
+    pop %eax
+ret

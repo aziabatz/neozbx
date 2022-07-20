@@ -1,7 +1,7 @@
 /**
  * @ Author: Ahmed Ziabat Ziabat (aka) BLACKBURN
  * @ Created: 2022-06-07
- * @ Last revision: 2022-06-08
+ * @ Last revision: 2022-06-10
  * @ Description: Copyright (c) 2021-2022, Ahmed Ziabat
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -16,71 +16,47 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
 .global __install_idt
 
 
-/*
- * EAX: idt array index
- * EBX: idt array start
- * 
- * ECX: offset
- * DX: segment selector
- * DI: flags
-*/
-__install_gate:
-
+/**
+ * EBX: Gate address
+ * EAX: Offset
+ */
+__set_offset:
     push %eax
-    push %ebx
-    push %ecx
-    push %edx
-    push %esi
-    push %edi
-
-    mov %eax, %esi
-    mov _idt_gate_start, %ebx
-
-    //offset low 16 and high 16
-    mov %ecx, %eax
-    mov %ax, 0(%ebx, %esi, 8)
+    movw %ax, 0(%ebx)
     shr $16, %eax
-    mov %ax, 6(%ebx, %esi, 8)
-    
-    //segment selector
-    mov %dx, 2(%ebx, %esi, 8)
-
-    //flags and zeroed
-    shl $8, %edi
-    and $0xFF00, %edi
-    
-    mov %di, 4(%ebx, %esi, 8)
-    
-    pop %edi
-    pop %esi
-    pop %edx
-    pop %ecx
-    pop %ebx
+    movw %ax, 6(%ebx)
     pop %eax
-    
-
 ret
 
+/** 
+ * EBX: Gate address
+ * EAX: Segment Selector
+ */
+__set_segsel:
+    movw %ax, 2(%ebx)
+ret
 
-/*
- * EAX: handler offset
- * EBX: idt array start
- * EDI: idt array index
-*/
-__set_gate_handler:
+/**
+ * EBX: Gate address
+ * EAX: Gate type
+ * ECX: DPL
+ */
+__set_flags:
+    push %edx
+    
+    xor $0b1111, %al
 
-    push %eax
-    push %ebx
-    push %edi
+    xor %edx,%edx
+    movb %cl, %dl
+    shrb $1, %dl
+    and $0b110, %dl
+    or $0b1000, %dl
+    shrb $4, %dl // -> 1XX0 0000
 
-    mov %ax, 0(%ebx, %edi, 8)
-    shr $16, %eax
-    mov %ax, 6(%ebx, %edi, 8)
+    or %dl, %al
+    movb %al, 5(%ebx)
 
-    pop %edi
-    pop %ebx
-    pop %eax
-
+    pop %edx
 ret
 
 __set_gates:
@@ -89,23 +65,16 @@ __set_gates:
     push %ecx
     push %edx
     push %edi
+    push %esi
+        
+    //set offset
+    mov _exceptions_table(,%ecx,8), %eax //offset
+    //set segment
 
-    mov $32, %ecx
-    __idt_spec_set:
-        mov %ecx, %eax
-        mov _idt_start, %ebx
-        mov $_KERNEL_CS, %edx
-        xor %edi,%edi
-        mov $_IDT_GATE_FLAGS, %di
-        //no need to modify ecx?
-        push %ecx
-            mov $_exceptions_table, %edi
-            dec %ecx
-            mov (%edi, %ecx, 4),%ecx
-            call __install_gate
-        pop %ecx
-    loop __idt_spec_set
+    //set flags
 
+
+    pop %esi
     pop %edi
     pop %edx
     pop %ecx
@@ -113,12 +82,13 @@ __set_gates:
     pop %eax
 ret
 
+
 __install_idt:
 
     call __set_gates
-    cli
+    #cli
     lidtl _idtr
-    sti
+    #sti
 
 ret
 
@@ -130,9 +100,11 @@ _idtr:
 
 _idt_start:
 
-.space (_IDT_GATE_SIZE * 32)
+.space (_IDT_GATE_SIZE * 256)
 
 _idt_end:
+
+_exceptions_table:
 
 .long __int_0x00
 .long __int_0x01
@@ -182,8 +154,6 @@ _idt_gate_end:
 .set _IDT_GATE_SIZE, (_idt_gate_end - _idt_gate_start)
 .set _KERNEL_CS, 0x08
 .set _IDT_GATE_FLAGS, 0x8E
-
-_exceptions_table:
 
 
 

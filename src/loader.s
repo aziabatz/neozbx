@@ -1,7 +1,7 @@
 /**
  * @ Author: Ahmed Ziabat Ziabat (aka) BLACKBURN
  * @ Created: 2022-01-27
- * @ Last revision: 2022-06-07
+ * @ Last revision: 2022-07-20
  * @ Description: Copyright (c) 2021-2022, Ahmed Ziabat
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -39,6 +39,7 @@ loader_stack:
 .globl __load_entry
 .globl __global_halt
 .extern __load_gdt
+.extern __install_idt
 .extern __kmain
 .extern _create_instances_
 
@@ -50,6 +51,7 @@ __load_gdt:
 __load_entry:
 	//TODO push multiboot header
 	call _create_instances_
+	//call __install_idt//FIXME
 	call __kmain
 
 	__global_halt:

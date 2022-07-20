@@ -117,7 +117,7 @@ BasicVGA::BasicVGA(int width, int height){
     this->cursorY = 0;
     this->screenDepth = 2;
     indexPort = &(SystemPort(0x3D4));
-    charPort = &(SystemPort(0x3D5));
+    charPort = &(SystemPort(0x3D5));//FIXME addresses
 }
 
 void BasicVGA::writeToFramebuffer(int x, int y, char c)
