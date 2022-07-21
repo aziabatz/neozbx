@@ -22,14 +22,7 @@ __load_gdt:
 
     ljmp $0x08, $__protected_mode
 
-    __protected_mode:
-        cli
-        movw $0x10, %ax
-        movw %ax, %ds
-        movw %ax, %es
-        movw %ax, %fs
-        movw %ax, %gs
-        movw %ax, %gs
+    
         
     ret
 
