@@ -1,7 +1,7 @@
 /**
  * @ Author: Ahmed Ziabat Ziabat (aka) BLACKBURN
  * @ Created: 2022-01-27
- * @ Last revision: 2022-07-20
+ * @ Last revision: 2022-07-21
  * @ Description: Copyright (c) 2021-2022, Ahmed Ziabat
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -37,18 +37,27 @@ loader_stack:
 
 .section .text
 .globl __load_entry
+.globl __protected_mode
 .globl __global_halt
 .extern __load_gdt
 .extern __install_idt
 .extern __kmain
 .extern _create_instances_
 
-__load_gdt:
+__load_entry:
 
 	mov $loader_stack, %esp
 	call __load_gdt
 
-__load_entry:
+__protected_mode:
+    cli
+    movw $0x10, %ax
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %fs
+    movw %ax, %gs
+    movw %ax, %gs
+
 	//TODO push multiboot header
 	call _create_instances_
 	//call __install_idt//FIXME
